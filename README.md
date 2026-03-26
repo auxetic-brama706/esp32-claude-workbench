@@ -403,6 +403,12 @@ pytest tests/ -v
 
 ---
 
+## 🌟 Acknowledgments
+
+Built with the assistance of [Claude](https://github.com/claude) by Anthropic.
+
+---
+
 ## 📄 License
 
 MIT — see [LICENSE](LICENSE).
