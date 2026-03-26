@@ -1,0 +1,40 @@
+menu "MQTT Telemetry Node Configuration"
+
+    menu "Wi-Fi"
+        config WIFI_SSID
+            string "Wi-Fi SSID"
+            default "myssid"
+
+        config WIFI_PASSWORD
+            string "Wi-Fi Password"
+            default "mypassword"
+    endmenu
+
+    menu "MQTT"
+        config MQTT_BROKER_URI
+            string "MQTT Broker URI"
+            default "mqtt://mqtt.example.com"
+            help
+                MQTT broker URI. Examples:
+                  mqtt://host:1883     (TCP)
+                  mqtts://host:8883    (TLS)
+                  ws://host:80/mqtt    (WebSocket)
+                  wss://host:443/mqtt  (WebSocket TLS)
+
+        config MQTT_TELEMETRY_TOPIC
+            string "Telemetry Topic"
+            default "device/esp32/telemetry"
+
+        config MQTT_STATUS_TOPIC
+            string "Status Topic (LWT)"
+            default "device/esp32/status"
+    endmenu
+
+    config TELEMETRY_INTERVAL_MS
+        int "Telemetry publish interval (ms)"
+        default 10000
+        range 1000 300000
+        help
+            How often to publish telemetry data in milliseconds.
+
+endmenu

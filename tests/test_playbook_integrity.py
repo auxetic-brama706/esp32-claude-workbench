@@ -15,6 +15,9 @@ EXPECTED_PLAYBOOKS = [
     "i2c_bringup.md",
     "watchdog_reset.md",
     "memory_review.md",
+    "ota_update.md",
+    "ble_debug.md",
+    "spi_bringup.md",
 ]
 
 # Required sections in every playbook

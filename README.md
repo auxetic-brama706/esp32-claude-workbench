@@ -2,7 +2,7 @@
 
 # ⚡ ESP32 Claude Workbench
 
-![ESP32 Claude Workbench Architecture](assets/banner.png)
+![ESP32 Claude Workbench Architecture](assets/banner_flow.png)
 
 **Deterministic AI workflow for ESP32 firmware development.**
 
@@ -121,14 +121,23 @@ esp32-claude-workbench/
 │   ├── guru_meditation.md       #   Crash analysis
 │   ├── wifi_debug.md            #   Wi-Fi troubleshooting
 │   ├── i2c_bringup.md           #   I2C peripheral setup
+│   ├── spi_bringup.md           #   SPI peripheral setup
+│   ├── ble_debug.md             #   BLE debugging
+│   ├── ota_update.md            #   OTA update issues
 │   ├── watchdog_reset.md        #   Watchdog timer issues
 │   └── memory_review.md         #   Memory leak & corruption
-├── templates/esp-idf-basic/     # Starter ESP-IDF project
+├── templates/
+│   ├── esp-idf-basic/           # Minimal ESP-IDF starter
+│   ├── wifi-station/            # Wi-Fi station with reconnect
+│   └── mqtt-node/               # MQTT telemetry with LWT
 ├── tools/                       # Python automation
 │   ├── validate_mission.py      #   Mission file validator
 │   ├── generate_contract.py     #   Contract generator
-│   └── summarize_logs.py        #   Log analyzer
-├── tests/                       # Pytest test suite
+│   ├── summarize_logs.py        #   Log analyzer
+│   ├── scan_pins.py             #   GPIO pin scanner & conflict detector
+│   ├── analyze_sdkconfig.py     #   sdkconfig misconfiguration checker
+│   └── check_task_stacks.py     #   FreeRTOS task stack analyzer
+├── tests/                       # 132 pytest tests
 └── .github/workflows/           # CI pipelines
 ```
 
@@ -192,6 +201,9 @@ Step-by-step triage guides for common ESP32 failures:
 | [Guru Meditation](playbooks/guru_meditation.md) | CPU exceptions, crashes, backtrace analysis |
 | [Wi-Fi Debug](playbooks/wifi_debug.md) | Connection failures, drops, authentication issues |
 | [I2C Bring-Up](playbooks/i2c_bringup.md) | I2C communication failures, bus hangs |
+| [SPI Bring-Up](playbooks/spi_bringup.md) | SPI peripheral misconfiguration, clock speed issues |
+| [BLE Debugging](playbooks/ble_debug.md) | BLE advertising failures, GATT connection drops |
+| [OTA Updates](playbooks/ota_update.md) | Firmware update failures, boot loops, invalid partitions |
 | [Watchdog Reset](playbooks/watchdog_reset.md) | Task/interrupt watchdog triggers |
 | [Memory Review](playbooks/memory_review.md) | Heap exhaustion, leaks, stack overflows |
 
@@ -286,6 +298,27 @@ Analyze ESP32 serial log output:
 ```bash
 summarize-logs serial_capture.log
 # Outputs: error count, crash detection, reset reason, component breakdown
+```
+
+### `scan-pins`
+Scan C/H files for GPIO pin assignments to detect conflicts, unsafe strapping pin usage, and ADC2/Wi-Fi incompatibilities:
+```bash
+scan-pins main/ --uses-wifi
+# Flags if ADC2 pins are used while Wi-Fi is enabled
+```
+
+### `analyze-sdkconfig`
+Analyze `sdkconfig` files against a comprehensive set of security, stability, and ESP-IDF production readiness rules:
+```bash
+analyze-sdkconfig sdkconfig
+# Warns about missing heap poisoning, low tick rates, or weak passwords
+```
+
+### `check-stacks`
+Scan source code for FreeRTOS `xTaskCreate` calls to statically detect tasks with potentially insufficient stack sizes:
+```bash
+check-stacks main/
+# Flags Wi-Fi/TLS tasks that are given dangerously small stacks
 ```
 
 ---

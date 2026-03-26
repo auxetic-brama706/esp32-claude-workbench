@@ -39,6 +39,9 @@ dev = [
 validate-mission = "tools.validate_mission:main"
 generate-contract = "tools.generate_contract:main"
 summarize-logs = "tools.summarize_logs:main"
+scan-pins = "tools.scan_pins:main"
+analyze-sdkconfig = "tools.analyze_sdkconfig:main"
+check-stacks = "tools.check_task_stacks:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

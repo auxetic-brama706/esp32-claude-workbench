@@ -1,0 +1,15 @@
+menu "Wi-Fi Station Configuration"
+
+    config WIFI_SSID
+        string "Wi-Fi SSID"
+        default "myssid"
+        help
+            SSID (network name) to connect to.
+
+    config WIFI_PASSWORD
+        string "Wi-Fi Password"
+        default "mypassword"
+        help
+            Wi-Fi password (WPA2). Must be at least 8 characters.
+
+endmenu
