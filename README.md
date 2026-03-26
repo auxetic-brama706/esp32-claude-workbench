@@ -2,6 +2,8 @@
 
 # ⚡ ESP32 Claude Workbench
 
+![ESP32 Claude Workbench Architecture](assets/banner.png)
+
 **Deterministic AI workflow for ESP32 firmware development.**
 
 [![CI](https://github.com/agodianel/esp32-claude-workbench/actions/workflows/ci.yml/badge.svg)](https://github.com/agodianel/esp32-claude-workbench/actions/workflows/ci.yml)
