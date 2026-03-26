@@ -2,7 +2,7 @@
 
 import textwrap
 
-from tools.summarize_logs import parse_log_line, summarize_logs, format_summary
+from tools.summarize_logs import format_summary, parse_log_line, summarize_logs
 
 
 class TestParseLogLine:

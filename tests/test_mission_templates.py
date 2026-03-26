@@ -2,9 +2,7 @@
 
 from pathlib import Path
 
-import pytest
-
-from tools.validate_mission import extract_sections, validate_mission, REQUIRED_SECTIONS
+from tools.validate_mission import REQUIRED_SECTIONS, extract_sections, validate_mission
 
 # Path to the project root
 ROOT = Path(__file__).parent.parent

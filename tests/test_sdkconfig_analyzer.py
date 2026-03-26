@@ -1,6 +1,6 @@
 """Tests for the sdkconfig analyzer tool."""
 
-from tools.analyze_sdkconfig import parse_sdkconfig, analyze_config
+from tools.analyze_sdkconfig import analyze_config, parse_sdkconfig
 
 
 class TestParseSDKConfig:

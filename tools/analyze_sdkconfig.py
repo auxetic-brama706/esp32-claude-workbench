@@ -274,10 +274,13 @@ def analyze_config(config: dict[str, str]) -> list[ConfigIssue]:
                 )
             )
 
-    return sorted(issues, key=lambda i: (
-        {"ERROR": 0, "WARNING": 1, "INFO": 2}[i.severity],
-        i.category,
-    ))
+    return sorted(
+        issues,
+        key=lambda i: (
+            {"ERROR": 0, "WARNING": 1, "INFO": 2}[i.severity],
+            i.category,
+        ),
+    )
 
 
 def format_report(issues: list[ConfigIssue], config: dict[str, str]) -> str:
@@ -299,7 +302,9 @@ def format_report(issues: list[ConfigIssue], config: dict[str, str]) -> str:
     info_count = sum(1 for i in issues if i.severity == "INFO")
 
     lines.append("## Summary")
-    lines.append(f"- **Config entries**: {len([k for k, v in config.items() if v != '__NOT_SET__'])}")
+    lines.append(
+        f"- **Config entries**: {len([k for k, v in config.items() if v != '__NOT_SET__'])}"
+    )
     lines.append(f"- **Errors**: {error_count}")
     lines.append(f"- **Warnings**: {warn_count}")
     lines.append(f"- **Info**: {info_count}")

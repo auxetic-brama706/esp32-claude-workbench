@@ -4,12 +4,9 @@ import textwrap
 from pathlib import Path
 
 from tools.scan_pins import (
-    scan_file,
-    analyze_pins,
-    detect_wifi_usage,
     PinAssignment,
-    FORBIDDEN_PINS,
-    INPUT_ONLY_PINS,
+    analyze_pins,
+    scan_file,
 )
 
 # Write test C files to a temp location
@@ -27,45 +24,61 @@ class TestScanFile:
     """Test GPIO pin detection from source files."""
 
     def test_detect_gpio_num_defines(self, tmp_path):
-        f = _write_temp_c(tmp_path, "test.h", """\
+        f = _write_temp_c(
+            tmp_path,
+            "test.h",
+            """\
             #define LED_PIN GPIO_NUM_2
             #define BTN_PIN GPIO_NUM_0
-        """)
+        """,
+        )
         pins = scan_file(f)
         gpios = {p.gpio for p in pins}
         assert 2 in gpios
         assert 0 in gpios
 
     def test_detect_named_pin_defines(self, tmp_path):
-        f = _write_temp_c(tmp_path, "test.h", """\
+        f = _write_temp_c(
+            tmp_path,
+            "test.h",
+            """\
             #define I2C_SDA_PIN 21
             #define I2C_SCL_PIN 22
-        """)
+        """,
+        )
         pins = scan_file(f)
         gpios = {p.gpio for p in pins}
         assert 21 in gpios
         assert 22 in gpios
 
     def test_detect_i2c_config(self, tmp_path):
-        f = _write_temp_c(tmp_path, "test.c", """\
+        f = _write_temp_c(
+            tmp_path,
+            "test.c",
+            """\
             i2c_config_t conf = {
                 .sda_io_num = 21,
                 .scl_io_num = 22,
             };
-        """)
+        """,
+        )
         pins = scan_file(f)
         gpios = {p.gpio for p in pins}
         assert 21 in gpios
         assert 22 in gpios
 
     def test_detect_spi_config(self, tmp_path):
-        f = _write_temp_c(tmp_path, "test.c", """\
+        f = _write_temp_c(
+            tmp_path,
+            "test.c",
+            """\
             spi_bus_config_t bus = {
                 .mosi_io_num = 23,
                 .miso_io_num = 19,
                 .sclk_io_num = 18,
             };
-        """)
+        """,
+        )
         pins = scan_file(f)
         gpios = {p.gpio for p in pins}
         assert 23 in gpios

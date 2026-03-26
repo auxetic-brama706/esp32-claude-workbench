@@ -40,9 +40,7 @@ class LogSummary:
 
 
 # Pattern for ESP-IDF log format: X (timestamp) tag: message
-LOG_PATTERN = re.compile(
-    r"^([EWIDV])\s+\((\d+)\)\s+([^:]+):\s+(.*)$"
-)
+LOG_PATTERN = re.compile(r"^([EWIDV])\s+\((\d+)\)\s+([^:]+):\s+(.*)$")
 
 # Pattern for reset reason
 RESET_PATTERN = re.compile(r"rst:(0x[0-9a-fA-F]+)\s+\(([^)]+)\)")
@@ -164,7 +162,7 @@ def format_summary(summary: LogSummary) -> str:
 
     # Reset reason
     if summary.reset_reason:
-        lines.append(f"## Reset Reason")
+        lines.append("## Reset Reason")
         lines.append(f"- {summary.reset_reason}")
         lines.append("")
 

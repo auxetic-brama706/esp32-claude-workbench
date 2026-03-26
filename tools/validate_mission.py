@@ -92,14 +92,14 @@ def validate_file(filepath: Path) -> bool:
     print(f"  Found sections: {len(result['found'])}")
 
     if result["missing_required"]:
-        print(f"  ❌ Missing required sections:")
+        print("  ❌ Missing required sections:")
         for section in result["missing_required"]:
             print(f"     - {section}")
     else:
-        print(f"  ✅ All required sections present")
+        print("  ✅ All required sections present")
 
     if result["missing_recommended"]:
-        print(f"  ⚠️  Missing recommended sections:")
+        print("  ⚠️  Missing recommended sections:")
         for section in result["missing_recommended"]:
             print(f"     - {section}")
 

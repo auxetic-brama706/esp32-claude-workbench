@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import sys
 import textwrap
 from datetime import datetime, timezone
 from pathlib import Path
@@ -145,7 +144,8 @@ def main() -> None:
         help="Rollback strategy.",
     )
     parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         help="Output file path. Prints to stdout if not specified.",
     )
 

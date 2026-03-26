@@ -13,7 +13,7 @@ from __future__ import annotations
 import re
 import sys
 from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
 
@@ -51,41 +51,25 @@ ADC2_PINS = {0, 2, 4, 12, 13, 14, 15, 25, 26, 27}
 # Patterns to detect GPIO usage
 PATTERNS = [
     # #define PIN_NAME GPIO_NUM_XX or #define PIN_NAME XX
-    re.compile(
-        r"#define\s+(\w+)\s+GPIO_NUM_(\d+)", re.MULTILINE
-    ),
+    re.compile(r"#define\s+(\w+)\s+GPIO_NUM_(\d+)", re.MULTILINE),
     re.compile(
         r"#define\s+(\w+(?:_PIN|_GPIO|_SDA|_SCL|_MOSI|_MISO|_CS|_CLK|_RST|_DC|_LED|_BTN|_INT))\s+(\d+)",
         re.MULTILINE,
     ),
     # gpio_config_t with pin_bit_mask
-    re.compile(
-        r"\.pin_bit_mask\s*=\s*\(\s*1ULL\s*<<\s*(\d+)\s*\)", re.MULTILINE
-    ),
+    re.compile(r"\.pin_bit_mask\s*=\s*\(\s*1ULL\s*<<\s*(\d+)\s*\)", re.MULTILINE),
     # gpio_set_direction(GPIO_NUM_XX, ...)
-    re.compile(
-        r"gpio_set_direction\s*\(\s*GPIO_NUM_(\d+)", re.MULTILINE
-    ),
+    re.compile(r"gpio_set_direction\s*\(\s*GPIO_NUM_(\d+)", re.MULTILINE),
     # gpio_set_level(GPIO_NUM_XX, ...)
-    re.compile(
-        r"gpio_set_level\s*\(\s*GPIO_NUM_(\d+)", re.MULTILINE
-    ),
+    re.compile(r"gpio_set_level\s*\(\s*GPIO_NUM_(\d+)", re.MULTILINE),
     # i2c_config .sda_io_num = XX
-    re.compile(
-        r"\.(sda_io_num|scl_io_num)\s*=\s*(\d+)", re.MULTILINE
-    ),
+    re.compile(r"\.(sda_io_num|scl_io_num)\s*=\s*(\d+)", re.MULTILINE),
     # spi_bus_config_t fields
-    re.compile(
-        r"\.(mosi_io_num|miso_io_num|sclk_io_num)\s*=\s*(\d+)", re.MULTILINE
-    ),
+    re.compile(r"\.(mosi_io_num|miso_io_num|sclk_io_num)\s*=\s*(\d+)", re.MULTILINE),
     # UART tx_io_num / rx_io_num
-    re.compile(
-        r"\.(tx_io_num|rx_io_num|rts_io_num|cts_io_num)\s*=\s*(\d+)", re.MULTILINE
-    ),
+    re.compile(r"\.(tx_io_num|rx_io_num|rts_io_num|cts_io_num)\s*=\s*(\d+)", re.MULTILINE),
     # LEDC output_io_num
-    re.compile(
-        r"\.output_io_num\s*=\s*(\d+)", re.MULTILINE
-    ),
+    re.compile(r"\.output_io_num\s*=\s*(\d+)", re.MULTILINE),
 ]
 
 # Wi-Fi usage indicators
@@ -177,9 +161,7 @@ def detect_wifi_usage(directory: Path) -> bool:
     return False
 
 
-def analyze_pins(
-    assignments: list[PinAssignment], uses_wifi: bool = False
-) -> list[PinIssue]:
+def analyze_pins(assignments: list[PinAssignment], uses_wifi: bool = False) -> list[PinIssue]:
     """Analyze pin assignments for issues.
 
     Args:
@@ -236,7 +218,18 @@ def analyze_pins(
 
         # Check input-only pins used for output-sounding purposes
         if gpio in INPUT_ONLY_PINS:
-            output_keywords = {"LED", "MOSI", "SDA", "SCL", "TX", "CS", "RST", "DC", "CLK", "output"}
+            output_keywords = {
+                "LED",
+                "MOSI",
+                "SDA",
+                "SCL",
+                "TX",
+                "CS",
+                "RST",
+                "DC",
+                "CLK",
+                "output",
+            }
             for user in users:
                 if any(kw.lower() in user.purpose.lower() for kw in output_keywords):
                     issues.append(

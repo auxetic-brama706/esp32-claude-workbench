@@ -166,7 +166,6 @@ def scan_file(filepath: Path) -> list[TaskInfo]:
         line_num = content[:pos].count("\n") + 1
 
         # Skip if this is actually xTaskCreatePinnedToCore
-        pre_context = content[max(0, pos - 20) : pos]
         if "PinnedToCore" in content[pos : pos + 30]:
             continue
 
@@ -255,7 +254,9 @@ def analyze_tasks(tasks: list[TaskInfo]) -> list[StackIssue]:
                 )
             )
 
-    return sorted(issues, key=lambda i: (0 if i.severity == "ERROR" else 1 if i.severity == "WARNING" else 2))
+    return sorted(
+        issues, key=lambda i: 0 if i.severity == "ERROR" else 1 if i.severity == "WARNING" else 2
+    )
 
 
 def format_report(tasks: list[TaskInfo], issues: list[StackIssue]) -> str:

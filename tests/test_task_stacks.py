@@ -4,10 +4,10 @@ import textwrap
 from pathlib import Path
 
 from tools.check_task_stacks import (
-    scan_file,
-    analyze_tasks,
-    try_parse_int,
     TaskInfo,
+    analyze_tasks,
+    scan_file,
+    try_parse_int,
 )
 
 
@@ -37,12 +37,16 @@ class TestScanFile:
     """Test task creation detection."""
 
     def test_detect_xTaskCreate(self, tmp_path):
-        f = _write_temp_c(tmp_path, "test.c", '''\
+        f = _write_temp_c(
+            tmp_path,
+            "test.c",
+            """\
             void my_task(void *arg) {}
             void init() {
                 xTaskCreate(my_task, "sensor_task", 4096, NULL, 5, NULL);
             }
-        ''')
+        """,
+        )
         tasks = scan_file(f)
         assert len(tasks) == 1
         assert tasks[0].name == "sensor_task"
@@ -51,12 +55,16 @@ class TestScanFile:
         assert tasks[0].core is None
 
     def test_detect_xTaskCreatePinnedToCore(self, tmp_path):
-        f = _write_temp_c(tmp_path, "test.c", '''\
+        f = _write_temp_c(
+            tmp_path,
+            "test.c",
+            """\
             void wifi_task(void *arg) {}
             void init() {
                 xTaskCreatePinnedToCore(wifi_task, "wifi_loop", 8192, NULL, 10, NULL, 0);
             }
-        ''')
+        """,
+        )
         tasks = scan_file(f)
         assert len(tasks) == 1
         assert tasks[0].name == "wifi_loop"
@@ -64,14 +72,18 @@ class TestScanFile:
         assert tasks[0].core == "0"
 
     def test_detect_multiple_tasks(self, tmp_path):
-        f = _write_temp_c(tmp_path, "test.c", '''\
+        f = _write_temp_c(
+            tmp_path,
+            "test.c",
+            """\
             void task_a(void *arg) {}
             void task_b(void *arg) {}
             void init() {
                 xTaskCreate(task_a, "alpha", 2048, NULL, 3, NULL);
                 xTaskCreate(task_b, "beta", 4096, NULL, 5, NULL);
             }
-        ''')
+        """,
+        )
         tasks = scan_file(f)
         assert len(tasks) == 2
         names = {t.name for t in tasks}
@@ -88,52 +100,87 @@ class TestAnalyzeTasks:
     """Test stack size analysis."""
 
     def test_tiny_stack_error(self):
-        tasks = [TaskInfo(
-            name="tiny", stack_size=512, stack_expr="512",
-            priority="5", core=None, function="tiny_fn",
-            file="test.c", line=1,
-        )]
+        tasks = [
+            TaskInfo(
+                name="tiny",
+                stack_size=512,
+                stack_expr="512",
+                priority="5",
+                core=None,
+                function="tiny_fn",
+                file="test.c",
+                line=1,
+            )
+        ]
         issues = analyze_tasks(tasks)
         errors = [i for i in issues if i.severity == "ERROR"]
         assert len(errors) >= 1
         assert any("below absolute minimum" in i.message for i in errors)
 
     def test_wifi_task_small_stack_warning(self):
-        tasks = [TaskInfo(
-            name="wifi_handler", stack_size=2048, stack_expr="2048",
-            priority="5", core=None, function="wifi_handler_fn",
-            file="test.c", line=1,
-        )]
+        tasks = [
+            TaskInfo(
+                name="wifi_handler",
+                stack_size=2048,
+                stack_expr="2048",
+                priority="5",
+                core=None,
+                function="wifi_handler_fn",
+                file="test.c",
+                line=1,
+            )
+        ]
         issues = analyze_tasks(tasks)
         warnings = [i for i in issues if i.severity == "WARNING"]
         assert any("WIFI" in i.message for i in warnings)
 
     def test_https_task_small_stack_warning(self):
-        tasks = [TaskInfo(
-            name="https_client", stack_size=4096, stack_expr="4096",
-            priority="5", core=None, function="https_task",
-            file="test.c", line=1,
-        )]
+        tasks = [
+            TaskInfo(
+                name="https_client",
+                stack_size=4096,
+                stack_expr="4096",
+                priority="5",
+                core=None,
+                function="https_task",
+                file="test.c",
+                line=1,
+            )
+        ]
         issues = analyze_tasks(tasks)
         warnings = [i for i in issues if i.severity == "WARNING"]
         assert any("HTTP" in i.message for i in warnings)
 
     def test_adequate_stack_no_issues(self):
-        tasks = [TaskInfo(
-            name="sensor_read", stack_size=4096, stack_expr="4096",
-            priority="5", core=None, function="read_sensor",
-            file="test.c", line=1,
-        )]
+        tasks = [
+            TaskInfo(
+                name="sensor_read",
+                stack_size=4096,
+                stack_expr="4096",
+                priority="5",
+                core=None,
+                function="read_sensor",
+                file="test.c",
+                line=1,
+            )
+        ]
         issues = analyze_tasks(tasks)
         errors = [i for i in issues if i.severity == "ERROR"]
         assert len(errors) == 0
 
     def test_macro_stack_info(self):
-        tasks = [TaskInfo(
-            name="dynamic", stack_size=None, stack_expr="MY_STACK_SIZE",
-            priority="5", core=None, function="dynamic_fn",
-            file="test.c", line=1,
-        )]
+        tasks = [
+            TaskInfo(
+                name="dynamic",
+                stack_size=None,
+                stack_expr="MY_STACK_SIZE",
+                priority="5",
+                core=None,
+                function="dynamic_fn",
+                file="test.c",
+                line=1,
+            )
+        ]
         issues = analyze_tasks(tasks)
         infos = [i for i in issues if i.severity == "INFO"]
         assert any("macro" in i.message.lower() for i in infos)
