@@ -4,7 +4,7 @@
 
 **Deterministic AI workflow for ESP32 firmware development.**
 
-[![CI](https://github.com/your-org/esp32-claude-workbench/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/esp32-claude-workbench/actions/workflows/ci.yml)
+[![CI](https://github.com/agodianel/esp32-claude-workbench/actions/workflows/ci.yml/badge.svg)](https://github.com/agodianel/esp32-claude-workbench/actions/workflows/ci.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -53,7 +53,7 @@ This repository provides:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/esp32-claude-workbench.git
+git clone https://github.com/agodianel/esp32-claude-workbench.git
 cd esp32-claude-workbench
 
 # Create virtual environment
@@ -379,4 +379,3 @@ MIT — see [LICENSE](LICENSE).
 **ESP32 Claude Workbench** — *Structure over magic. Testing over claims. Workflows over prompts.*
 
 </div>
-# esp32-claude-workbench
