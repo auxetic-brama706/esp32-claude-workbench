@@ -14,11 +14,17 @@ def generate_mission(feature_name: str, board: str, description: str) -> str:
     date_str_iso = datetime.now().strftime("%Y-%m-%d")
     
     filename = f"{date_str_iso}-{sanitized_name}.md"
-    file_path = os.path.join("missions", filename)
+    
+    # Get the project root directory (two levels up from this file)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(os.path.dirname(current_dir))
+    
+    missions_dir = os.path.join(project_root, "missions")
+    file_path = os.path.join(missions_dir, filename)
     
     # Ensure missions directory exists
-    if not os.path.exists("missions"):
-        os.makedirs("missions")
+    if not os.path.exists(missions_dir):
+        os.makedirs(missions_dir)
         
     template = f"""---
 # Mission: {feature_name}

@@ -133,6 +133,13 @@ Or add `.mcp.json` to your ESP32 project root:
 In Claude Code, ask: "Search ESP docs for ADC2 Wi-Fi conflict"
 Claude should call the `search_esp_docs` tool and return grounded results.
 
+### 5. Manual Testing (No Claude Code required)
+If you do not have Claude Code installed, or just want to test the tools manually, you can use the official MCP Inspector. This spins up a visual web interface to run the tools.
+```bash
+cd mcp
+npx -y @modelcontextprotocol/inspector uv run mcp_server.py
+```
+
 ---
 
 ## 📁 Repository Structure
