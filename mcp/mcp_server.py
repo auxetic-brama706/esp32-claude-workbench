@@ -1,14 +1,14 @@
 import sys
 import os
 
-# Ensure tools can be imported
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Ensure the root project directory is in sys.path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from mcp.server.fastmcp import FastMCP
-from tools.pin_audit import run_pin_audit
-from tools.sdkconfig_check import run_sdkconfig_check
-from tools.mission_generator import generate_mission
-from tools.search_docs import search_esp_docs as _search_esp_docs
+from mcp.tools.pin_audit import run_pin_audit
+from mcp.tools.sdkconfig_check import run_sdkconfig_check
+from mcp.tools.mission_generator import generate_mission
+from mcp.tools.search_docs import search_esp_docs as _search_esp_docs
 
 mcp = FastMCP("esp32-workbench")
 
@@ -30,7 +30,6 @@ def create_mission(feature_name: str, board: str, description: str) -> str:
 @mcp.tool()
 def search_esp_docs(query: str, top_k: int = 5) -> str:
     """Search ESP32 TRMs and datasheets semantically. Use before writing peripheral code."""
-    # Ensure top_k is an integer. Sometimes LLMs pass strings or floats.
     try:
         top_k = int(top_k)
     except (ValueError, TypeError):
