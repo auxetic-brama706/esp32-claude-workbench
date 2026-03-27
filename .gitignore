@@ -46,3 +46,8 @@ Thumbs.db
 
 # Claude
 .claude/settings.local.json
+Instruction.md
+Reddit.md
+
+# Cache for local vector index
+.cache/

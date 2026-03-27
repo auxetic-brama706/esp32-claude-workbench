@@ -106,6 +106,20 @@ Every code change must include:
 3. **Test results** — pass/fail with output evidence.
 4. **What was not tested** — explicit gaps and reasons.
 
+## MCP Tools Available
+
+This project ships an MCP server. When Claude Code is connected, always prefer using
+the MCP tools over guessing hardware behavior.
+
+### Available tools:
+- `pin_audit(file_path)` — call this before any GPIO-related implementation
+- `sdkconfig_review(sdkconfig_path)` — call this before release readiness review
+- `create_mission(feature_name, board, description)` — call this before starting any new feature
+- `search_esp_docs(query)` — call this before writing ANY peripheral, ADC, timer, Wi-Fi, or BLE code
+
+### Rule: never hallucinate hardware constraints.
+If you are unsure about a GPIO, peripheral, or hardware behavior, call search_esp_docs first.
+
 ## Available Skills
 
 | Skill | Command | Purpose |

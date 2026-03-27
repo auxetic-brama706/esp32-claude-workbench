@@ -95,6 +95,43 @@ pytest tests/ -v
    ```bash
    validate-mission missions/2026-03-my-feature.md
    ```
+---
+
+## 🤖 MCP Server Setup (Claude Code Integration)
+
+### 1. Install dependencies
+```bash
+cd mcp
+pip install -r requirements.txt
+```
+
+### 2. Build the local ESP32 docs index (run once, ~5 min)
+```bash
+python scripts/index_esp_docs.py
+```
+This downloads ESP32 TRMs and datasheets and builds a local vector search index.
+No API key required. Everything runs on your machine.
+
+### 3. Register the MCP server with Claude Code
+```bash
+claude mcp add esp32-workbench -- python /path/to/esp32-claude-workbench/mcp/mcp_server.py
+```
+
+Or add `.mcp.json` to your ESP32 project root:
+```json
+{
+  "mcpServers": {
+    "esp32-workbench": {
+      "command": "python",
+      "args": ["/path/to/esp32-claude-workbench/mcp/mcp_server.py"]
+    }
+  }
+}
+```
+
+### 4. Verify it works
+In Claude Code, ask: "Search ESP docs for ADC2 Wi-Fi conflict"
+Claude should call the `search_esp_docs` tool and return grounded results.
 
 ---
 
@@ -105,6 +142,7 @@ esp32-claude-workbench/
 ├── CLAUDE.md                    # Claude Code rules for ESP32
 ├── CONTRIBUTING.md              # Contribution guide
 ├── .claude/skills/              # Claude Code skill definitions
+│   ├── hardware_check/          #   Verify board hardware limitations
 │   ├── repo_scout/              #   Scan project structure
 │   ├── feature_contract/        #   Generate implementation contracts
 │   ├── esp32_pin_audit/         #   Audit GPIO pin usage
@@ -113,10 +151,12 @@ esp32-claude-workbench/
 │   ├── esp32_log_triage/        #   Parse serial logs
 │   ├── esp32_crash_review/      #   Analyze crash dumps
 │   └── pr_prepare/              #   Prepare pull requests
+├── boards/                      # Board-specific pinouts and limitations
 ├── missions/
 │   ├── templates/               # Mission & contract templates
 │   └── examples/                # Worked example missions
 ├── playbooks/                   # Debug & triage playbooks
+│   ├── hardware_limitations.md  #   Hardware quirks, strapping pins, ADC2
 │   ├── build_failure.md         #   Build error triage
 │   ├── guru_meditation.md       #   Crash analysis
 │   ├── wifi_debug.md            #   Wi-Fi troubleshooting
@@ -151,6 +191,7 @@ Skills are structured Claude Code instructions for specific tasks. Use them as s
 |---------|-------|-------------|
 | `/scout` | `repo_scout` | Scan project structure, map components, identify dependencies |
 | `/contract` | `feature_contract` | Generate implementation contract before any code changes |
+| `/hw-check` | `esp32_hardware_check` | Verify user board against hardware limitations |
 | `/pin-audit` | `esp32_pin_audit` | Audit GPIO usage for conflicts and reserved pin violations |
 | `/arch-review` | `esp32_arch_review` | Review architecture for RTOS safety, memory, error handling |
 | `/test-plan` | `esp32_test_plan` | Generate multi-layer test plan |
@@ -197,6 +238,7 @@ Step-by-step triage guides for common ESP32 failures:
 
 | Playbook | When to Use |
 |----------|------------|
+| [Hardware Limitations](playbooks/hardware_limitations.md) | Pin constraints, strapping pins, ADC2/Wi-Fi conflicts |
 | [Build Failure](playbooks/build_failure.md) | Compilation errors, linker failures, CMake issues |
 | [Guru Meditation](playbooks/guru_meditation.md) | CPU exceptions, crashes, backtrace analysis |
 | [Wi-Fi Debug](playbooks/wifi_debug.md) | Connection failures, drops, authentication issues |
